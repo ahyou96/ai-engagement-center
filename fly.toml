@@ -1,0 +1,32 @@
+# Fly.io — `fly launch --copy-config --no-deploy`, then `fly secrets set AEC_DEMO_PASSWORD=...` and `fly deploy`.
+app = "aec-demo-e00926"
+primary_region = "sin"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  AEC_PUBLIC = "1"
+  AEC_AI_PROVIDER = "mock"
+  AEC_DB_PATH = "/data/aec.db"
+  PORT = "3210"
+
+[http_service]
+  internal_port = 3210
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    path = "/api/health"
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "120s"
+
+[[vm]]
+  memory = "1gb"
+
+[mounts]
+  source = "data"
+  destination = "/data"

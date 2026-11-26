@@ -1,0 +1,14 @@
+# Local demo stack. Everything runs in mock mode: no real messages, entitlements, or paid AI calls.
+services:
+  app:
+    build: .
+    ports: ["3210:3210"]
+    env_file: [.env.example]
+    environment:
+      AEC_DB_PATH: /data/aec.db
+      # Over plain HTTP in a local container the session cookie must not require TLS:
+      AEC_INSECURE_COOKIE: "1"
+    volumes: ["aec-data:/data"]
+    restart: unless-stopped
+volumes:
+  aec-data: {}
